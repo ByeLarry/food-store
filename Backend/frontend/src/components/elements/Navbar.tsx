@@ -1,15 +1,21 @@
 import { NavLink, useLocation } from "react-router-dom";
+import { useCart } from "../contexts/CartContext";
+import { useAuth } from "../contexts/AuthContext";
+import { FaShoppingCart } from "react-icons/fa";
+import React from "react";
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
+  const { user } = useAuth();
+  const { cartItems } = useCart();
 
   const isCurrentPage = (path: string): string => {
     return location.pathname === path ? "link-primary selected-link" : "";
   };
 
   return (
-    <div className=" navbar-sticky">
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <div className="navbar-sticky">
+      <main className="navbar navbar-expand-lg bg-body-tertiary py-1">
         <div className="container-fluid">
           <div className="container p-0">
             <div
@@ -23,7 +29,7 @@ export const Navbar: React.FC = () => {
                       "/"
                     )}`}
                     aria-current="page"
-                    to="/"
+                    to={{ pathname: "/", search: "?param=all" }}
                   >
                     Главная
                   </NavLink>
@@ -60,14 +66,32 @@ export const Navbar: React.FC = () => {
                   </NavLink>
                 </li>
               </ul>
-              <div className="d-flex basket-container">
-                <div className="icon-basket" style={{ fontSize: "30px" }} />
-                <p className="my-auto">Корзина</p>
-              </div>
+
+              <button
+                data-bs-target="#modalCart"
+                data-bs-toggle="modal"
+                style={{ border: "none", background: "none" }}
+              >
+                {location.pathname === "/checkout" || !user ? (
+                  <></>
+                ) : (
+                  <div className="d-flex basket-container">
+                    <FaShoppingCart style={{fontSize: "30px", margin: "7px"}}/>
+                    <p className="my-auto text-in-header">
+                      {cartItems.length === 0
+                        ? "Корзина"
+                        : cartItems.reduce(
+                            (total, item) => total + item.price * item.count,
+                            0
+                          ) + " ₽"}
+                    </p>
+                  </div>
+                )}
+              </button>
             </div>
           </div>
         </div>
-      </nav>
+      </main>
     </div>
   );
 };

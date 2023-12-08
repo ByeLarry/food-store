@@ -1,7 +1,11 @@
 import React from "react";
 import { IChildrenElement } from "../../interfaces/IChildrenElement";
 
-export const Modal: React.FC<IChildrenElement> = ({ children, modalTitle, modalId }) => {
+export const Modal: React.FC<IChildrenElement> = ({
+  children,
+  modalTitle,
+  modalId,
+}) => {
   return (
     <>
       {children}
@@ -17,8 +21,12 @@ export const Modal: React.FC<IChildrenElement> = ({ children, modalTitle, modalI
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="staticBackdropLabel">
-                {modalTitle}
+              <h1
+                className="modal-title fs-5"
+                id="staticBackdropLabel"
+                title="Расширенный просмотр"
+              >
+                👀
               </h1>
               <button
                 type="button"

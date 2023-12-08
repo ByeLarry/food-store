@@ -1,4 +1,6 @@
 /obj
 /bin
-env.json
+.env
 .vs
+/Uploads/*
+!/Uploads/.gitkeep

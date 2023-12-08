@@ -1,34 +1,44 @@
 ﻿using Backend.DataModeles;
+using Backend.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Backend.Controllers
 {
-    [Route("api/users")]
+    [Route("api/products")]
     [ApiController]
     public class HomeController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetUsers()
+        private readonly IMemoryCache _memoryCache;
+        private readonly IDbContext _DbContext;
+
+        public HomeController(IMemoryCache memoryCache, IDbContext DbContext)
         {
-            var user = new[]
+            _memoryCache = memoryCache;
+            _DbContext = DbContext;
+        }
+
+        [HttpGet]
+        public IActionResult GetProducts()
+        {
+            try
             {
-                new {name = "oleg"},
-                new {name = "ivan"}
-            };
+                if (_memoryCache.TryGetValue("Products", out List<Product> cachedProducts))
+                {
+                    return Ok(cachedProducts);
+                }
+                List<Product> products = new List<Product>();
+                products = _DbContext.products.ToList();
+                _memoryCache.Set("Products", products, TimeSpan.FromDays(1));
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Что-то пошло не так.");
+            }
 
-            //using (var cont = new ContextDataBase())
-            //{
-            //    var NewStatus = new Status
-            //    {
-            //        Name = "test"
-            //    };
-
-            //    cont.statuses.Add(NewStatus);
-            //    cont.SaveChanges();
-            //}
-
-
-            return Ok(user);
         }
     }
 }

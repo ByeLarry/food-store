@@ -1,4 +1,10 @@
+import { ModalLogin } from "./ModalLogin";
+import { useAuth } from "../contexts/AuthContext";
+import { ModalUser } from "./ModalUser";
+import { FaUser } from "react-icons/fa";
+
 export const Header: React.FC = () => {
+  const { user } = useAuth();
   return (
     <>
       <header>
@@ -14,7 +20,7 @@ export const Header: React.FC = () => {
                       alt="Logo"
                       width="50"
                       height="50"
-                      title="Food-Store"
+                      title="🍴"
                     />
                   </div>
                   <div className="my-auto px-2">
@@ -29,10 +35,30 @@ export const Header: React.FC = () => {
                   >
                     +7(912) 733-05-71
                   </a>
-                  <div className=" d-flex autorization-container">
-                    <div className="icon-user" style={{ fontSize: "30px" }} />
-                    <p className=" my-auto">Вход</p>
-                  </div>
+                  {!user ? <ModalLogin /> : <ModalUser />}
+
+                  {!user ? (
+                    <button
+                      data-bs-target={!user ? "#modalLogin" : "#modalUser"}
+                      data-bs-toggle="modal"
+                      style={{ border: "none", background: "none" }}
+                    >
+                      <div className=" d-flex autorization-container">
+                        <FaUser style={{fontSize: "30px", margin: "7px"}}/>
+                        <p className=" my-auto">Вход</p>
+                      </div>
+                    </button>
+                  ) : (
+                    <button
+                      data-bs-target={!user ? "#modalLogin" : "#modalUser"}
+                      data-bs-toggle="modal"
+                      style={{ border: "none", background: "none" }}
+                    >
+                      <div className="d-flex autorization-container p-2">
+                        <p className="my-auto text-in-header">Кабинет</p>
+                      </div>
+                    </button>
+                  )}
                 </div>
                 <button
                   className="navbar-toggler mt-1"

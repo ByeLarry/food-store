@@ -1,6 +1,10 @@
 export interface IProductContainerProps {
-  image: string;
+  id: number;
+  price: number;
+  name: string;
   description: string;
-  title: string;
-  id: Number;
+  category: string;
+  image: string;
+  date?: Date;
+  productLists?: null;
 }

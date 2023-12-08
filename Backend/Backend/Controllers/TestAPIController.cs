@@ -16,9 +16,16 @@ namespace Backend.Controllers
             using (var reader = new StreamReader(Request.Body))
             {
                 var requestBody = await reader.ReadToEndAsync();
-                
+
                 System.Console.WriteLine(requestBody);
             }
+
+            List<Product> products = new List<Product>();
+            using (var cont = new ContextDataBase())
+            {
+                products = cont.products.ToList();
+            }
+            Console.WriteLine(products.Count);
             return Ok();
         }
     }
